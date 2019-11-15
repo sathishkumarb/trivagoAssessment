@@ -42,20 +42,21 @@ class Booking {
         ]));
         
         
-         $metadata->addPropertyConstraint('rating', new Assert\LessThanOrEqual([
+        $metadata->addPropertyConstraint('rating', new Assert\LessThanOrEqual([
             'value' => 5,
         ]));
         
         
-         $metadata->addPropertyConstraint('reputation', new Assert\GreaterThanOrEqual([
+        $metadata->addPropertyConstraint('reputation', new Assert\GreaterThanOrEqual([
             'value' => 0,
         ]));
         
         
-         $metadata->addPropertyConstraint('reputation', new Assert\LessThanOrEqual([
+        $metadata->addPropertyConstraint('reputation', new Assert\LessThanOrEqual([
             'value' => 1000,
         ]));
-
+        
+        
     }
     
     public function validate(ExecutionContextInterface $context, $payload)
@@ -72,22 +73,19 @@ class Booking {
         
     }
     
-    
-   
-    
     public static function getCategories()
     {
         return ["hotel","alternative", "hostel", "lodge", "resort", "guest-house"];
-    }
-    
+    }   
 
     
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="bookings")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="bookings", cascade={"persist"})
      */
     private $location;
 
     /**
+    * @Assert\NotBlank()
     * @Assert\Regex(
     *     pattern="/^[0-5]+$/",
     *     message="Only numbers allowed"
@@ -117,7 +115,8 @@ class Booking {
     private $price;
 
     /**
-    * @ORM\Column(type="string", length=150)
+    * @Assert\NotBlank()
+    * @ORM\Column(type="text")
     */
     private $image;
 
@@ -125,6 +124,23 @@ class Booking {
     * @ORM\Column(type="integer", length=5)    
     */
     private $reputation;
+    
+    /**
+    * @ORM\Column(type="integer")    
+    */
+    private $availability;
+    
+    /**
+    * @Assert\Regex(
+    *     pattern="/^[0-9]+$/",
+    *     message="Only numbers allowed"
+    * )
+    * @Assert\Length(
+    * min = 5,
+    * minMessage = "Your zipcode must be at least {{ limit }} characters long"     
+    * )
+    */
+    private $zipcode;
 
     public function getId(): ?int
     {
@@ -214,7 +230,35 @@ class Booking {
 
         return $this;
     }
+    
+    public function getZipcode()
+    {
+        return $this->zipcode;
+    }
+    
+   public function setZipcode(int $zipcode): self
+    {
+        $this->zipcode = $zipcode;
 
+        return $this;
+    }
+    
+    public function __toString()
+    {
+        return;
+    }
+
+    public function getAvailability(): ?int
+    {
+        return $this->availability;
+    }
+
+    public function setAvailability(int $availability): self
+    {
+        $this->availability = $availability;
+
+        return $this;
+    }
 
     
 }

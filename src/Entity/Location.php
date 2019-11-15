@@ -1,5 +1,7 @@
 <?php
 namespace App\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
@@ -22,23 +24,57 @@ class Location {
    *     value = 5
    * )
    */
-  private $zipcocde;
+  private $zipcode;
+    
+    /**
+    * @ORM\OneToMany(targetEntity="Booking", mappedBy="location" , cascade={"all"}, fetch="EXTRA_LAZY")
+    */
+  private $bookings;
+    
+    /**
+    * Constructor
+    */
+    public function __construct()
+    {
+        $this->bookings = new \Doctrine\Common\Collections\ArrayCollection();
+
+    }
 
   public function getId(): ?int
   {
       return $this->id;
   }
 
-  public function getZipcocde(): ?int
+  public function getZipcode(): ?int
   {
-      return $this->zipcocde;
+      return $this->zipcode;
   }
 
-  public function setZipcocde(int $zipcocde): self
+  public function setZipcode(int $zipcode): self
   {
-      $this->zipcocde = $zipcocde;
+      $this->zipcode = $zipcode;
 
       return $this;
   }
+    
+       
+    public function addBooking(\App\Entity\Booking $bookings)
+    {
+        $this->bookings[] = $bookings;
+
+        return $this;
+    }
+
+
+    public function removeBooking(\App\Entity\Booking $booking)
+    {
+        $this->bookings->removeElement($booking);
+    }
+
+
+    public function getBookings()
+    {
+        return $this->bookings;
+    }
  
 }

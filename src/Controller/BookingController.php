@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use App\Entity\Booking;
+use App\Entity\Location;
 use App\Form\BookingType;
 /**
  * Booking controller.
@@ -38,7 +39,12 @@ class BookingController extends FOSRestController
     $data = json_decode($request->getContent(), true);
     $form->submit($data);
     if ($form->isSubmitted() && $form->isValid()) {
-      $em = $this->getDoctrine()->getManager();
+      $em = $this->getDoctrine()->getManager();        
+        
+        $location = new Location();
+        $location->setZipcode($data['zipcode']);
+        $booking->setLocation($location);       
+        
       $em->persist($booking);
       $em->flush();
       return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
