@@ -2,9 +2,13 @@
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
+
 /**
  * @ORM\Entity
- * @ORM\Table(name="booking")
+ * @ORM\Table(name="booking") 
  */
 class Booking {
     
@@ -16,11 +20,67 @@ class Booking {
     private $id;
 
     /**
-    * @ORM\Column(type="string", length=150)
     * @Assert\NotBlank()
-    *
+    * @Assert\Length(
+    * min = 10,
+    * minMessage = "Your hotel name must be at least {{ limit }} characters long"     
+    * )
+    * @ORM\Column(type="string", length=150)    
     */
     private $hotelname;
+    
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addConstraint(new Assert\Callback('validate'));
+        
+        $metadata->addPropertyConstraint('category', new Assert\Choice([
+            'callback' => 'getCategories',
+        ]));
+        
+        $metadata->addPropertyConstraint('rating', new Assert\GreaterThanOrEqual([
+            'value' => 0,
+        ]));
+        
+        
+         $metadata->addPropertyConstraint('rating', new Assert\LessThanOrEqual([
+            'value' => 5,
+        ]));
+        
+        
+         $metadata->addPropertyConstraint('reputation', new Assert\GreaterThanOrEqual([
+            'value' => 0,
+        ]));
+        
+        
+         $metadata->addPropertyConstraint('reputation', new Assert\LessThanOrEqual([
+            'value' => 1000,
+        ]));
+
+    }
+    
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        // somehow you have an array of "fake names"
+        $fakeNames = ["Free", "Offer", "Book", "Website"];
+
+        // check if the name is actually a fake name
+        if (in_array($this->getHotelname(), $fakeNames)) {
+            $context->buildViolation('This hotel name sounds totally fake!')
+                ->atPath('hotelname')
+                ->addViolation();
+        }
+        
+    }
+    
+    
+   
+    
+    public static function getCategories()
+    {
+        return ["hotel","alternative", "hostel", "lodge", "resort", "guest-house"];
+    }
+    
+
     
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="bookings")
@@ -28,25 +88,31 @@ class Booking {
     private $location;
 
     /**
-     * @ORM\Column(name="rating", type="boolean")
-     * @Assert\GreaterThanOrEqual(
-     *     value = 0
-     * )
-     * @Assert\LessThanOrEqual(
-     *     value = 5
-     * )
-     */
+    * @Assert\Regex(
+    *     pattern="/^[0-5]+$/",
+    *     message="Only numbers allowed"
+    * )
+    * @ORM\Column(type="integer", length=2)
+    */
     private $rating;
 
     /**
-    * @ORM\Column(type="string", length=20)
     * @Assert\NotBlank()
+    * @Assert\Regex(
+    *     pattern="/^[A-Za-z]+$/",
+    *     message="Only letters allowed"
+    * )
+    * @ORM\Column(type="string", length=20)
     */
     private $category;
 
     /**
-    * @ORM\Column(type="decimal", precision=8, scale=2)
-    * @Assert\NotBlank() 
+    * @Assert\NotBlank()
+    * @Assert\Regex(
+    *     pattern="/^[0-9]+$/",
+    *     message="Only numbers allowed"
+    * )
+    * @ORM\Column(type="decimal", precision=8, scale=2)    
     */
     private $price;
 
@@ -56,13 +122,7 @@ class Booking {
     private $image;
 
     /**
-    * @ORM\Column(type="integer", length=5)
-    * @Assert\GreaterThanOrEqual(
-    *     value = 0
-    * )
-    * @Assert\LessThanOrEqual(
-    *     value = 1000
-    * )
+    * @ORM\Column(type="integer", length=5)    
     */
     private $reputation;
 
@@ -83,12 +143,12 @@ class Booking {
         return $this;
     }
 
-    public function getRating(): ?bool
+    public function getRating(): ?int
     {
         return $this->rating;
     }
 
-    public function setRating(bool $rating): self
+    public function setRating(int $rating): self
     {
         $this->rating = $rating;
 
@@ -153,7 +213,8 @@ class Booking {
         $this->location = $location;
 
         return $this;
-    }  
+    }
+
 
     
 }
