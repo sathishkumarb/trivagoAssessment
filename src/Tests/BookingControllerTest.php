@@ -54,7 +54,7 @@ class BookingControllerTest extends TestCase
     }
     
     
-    public function testGet()
+    public function testGetBookingCity()
     {
         
         $client = new \GuzzleHttp\Client([
@@ -73,6 +73,110 @@ class BookingControllerTest extends TestCase
 
         
     }
+    
+    public function testGetBookingCategory()
+    {
+        
+        $client = new \GuzzleHttp\Client([
+            'base_url' => 'http://127.0.0.1:8000',
+            'defaults' => [
+                'exceptions' => false
+            ]
+        ]);
+        
+        $response = $client->get('http://127.0.0.1:8000/api/bookingByCategory/Hotel', []);
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $this->assertEquals("application/json", $contentType);
+
+        
+    }
+    
+    public function testGetBookingReputationBadge()
+    {
+        
+        $client = new \GuzzleHttp\Client([
+            'base_url' => 'http://127.0.0.1:8000',
+            'defaults' => [
+                'exceptions' => false
+            ]
+        ]);
+        
+        $response = $client->get('http://127.0.0.1:8000/api/bookingByReputationBadge/yellow', []);
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $this->assertEquals("application/json", $contentType);
+
+        
+    }
+
+    
+    public function testGetBookingRating()
+    {
+        
+        $client = new \GuzzleHttp\Client([
+            'base_url' => 'http://127.0.0.1:8000',
+            'defaults' => [
+                'exceptions' => false
+            ]
+        ]);
+        
+        $response = $client->get('http://127.0.0.1:8000/api/bookingByRating/1', []);
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $this->assertEquals("application/json", $contentType);
+
+        
+    }
+
+    
+    public function testGetBookingByAvailabilityLess()
+    {
+        
+        $client = new \GuzzleHttp\Client([
+            'base_url' => 'http://127.0.0.1:8000',
+            'defaults' => [
+                'exceptions' => false
+            ]
+        ]);
+        
+        $response = $client->get('http://127.0.0.1:8000/api/bookingByAvailabilityLess/1', []);
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $this->assertEquals("application/json", $contentType);
+
+        
+    }
+
+    
+    public function testGetBookingByAvailabilityGreater()
+    {
+        
+        $client = new \GuzzleHttp\Client([
+            'base_url' => 'http://127.0.0.1:8000',
+            'defaults' => [
+                'exceptions' => false
+            ]
+        ]);
+        
+        $response = $client->get('http://127.0.0.1:8000/api/bookingByAvailabilityGreater/1', []);
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $contentType = $response->getHeaders()["Content-Type"][0];
+        $this->assertEquals("application/json", $contentType);
+
+        
+    }
+
 
     
 }
