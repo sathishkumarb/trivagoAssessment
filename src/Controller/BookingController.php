@@ -51,19 +51,89 @@ class BookingController extends FOSRestController
     
   /**
    * get by booking city
-   * @Rest\Post("/bookingByCity/{city}")
+   * @Rest\Get("/bookingByCity/{city}")
    *
    * @return Response
    */
   public function getBookingByCityAction(string $city): View
   {
-      
-    $repository = $this->getDoctrine()->getRepository(Booking::class);
-    $booking = $repository->find(array('city'=>$city));
+        $entityManager = $this->getDoctrine()->getManager();        
 
-    return View::create($booking, Response::HTTP_OK);
+        $qb = $entityManager->createQueryBuilder();
+
+        $qb->select('c')
+            ->from(Booking::class, 'c')
+            ->innerJoin('c.location', 'p', 'WITH', 'p.id = c.location')
+            ->where('p.city = :city')
+            ->setParameter('city', $city);
+
+        $repository = $this->getDoctrine()->getRepository(Booking::class);
+        $query = $qb->getQuery();
+        $booking = $query->getResult();
+
+        return View::create($booking, Response::HTTP_OK);
     
   }
+    
+    /**
+    * get by booking reputationbadge
+    * @Rest\Get("/bookingByReputationBadge/{reputationbadge}")
+    *
+    * @return Response
+    */
+    public function getBookingByReputationBadgeAction(string $reputationbadge): View
+    {    
+
+        $repository = $this->getDoctrine()->getRepository(Booking::class);
+        $booking = $repository->findBy(array('reputationBadge'=>$reputationbadge));
+
+        return View::create($booking, Response::HTTP_OK);
+
+    }
+    
+    /**
+    * get by booking availability less than x
+    * @Rest\Get("/bookingByAvailabilityLess/{availability}")
+    *
+    * @return Response
+    */
+    public function getBookingByAvailabilityLessAction(string $availability): View
+    {    
+        $entityManager = $this->getDoctrine()->getManager();        
+        
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('e')
+           ->from(Booking::class, 'e')
+           ->where('e.availability < :old')
+           ->setParameter('old', $availability);
+
+        $entities = $qb->getQuery()->getResult();
+
+        return View::create($entities, Response::HTTP_OK);
+
+    }
+    
+    /**
+    * get by booking availability greater than x
+    * @Rest\Get("/bookingByAvailabilityGreater/{availability}")
+    *
+    * @return Response
+    */
+    public function getBookingByAvailabilityGreaterAction(string $availability): View
+    {    
+        $entityManager = $this->getDoctrine()->getManager();        
+        
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('e')
+           ->from(Booking::class, 'e')
+           ->where('e.availability > :old')
+           ->setParameter('old', $availability);
+
+        $entities = $qb->getQuery()->getResult();
+
+        return View::create($entities, Response::HTTP_OK);
+
+    }
     
   /**
    * Create Booking.
