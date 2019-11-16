@@ -25,7 +25,7 @@ class Booking {
     * min = 10,
     * minMessage = "Your hotel name must be at least {{ limit }} characters long"     
     * )
-    * @ORM\Column(type="string", length=150)    
+    * @ORM\Column(type="string", length=155)    
     */
     private $hotelname;
     
@@ -55,6 +55,8 @@ class Booking {
         $metadata->addPropertyConstraint('reputation', new Assert\LessThanOrEqual([
             'value' => 1000,
         ]));
+        
+        $metadata->addPropertyConstraint('image', new Assert\Url());
         
         
     }
@@ -90,7 +92,7 @@ class Booking {
     *     pattern="/^[0-5]+$/",
     *     message="Only numbers allowed"
     * )
-    * @ORM\Column(type="integer", length=2)
+    * @ORM\Column(type="smallint")
     */
     private $rating;
 
@@ -100,7 +102,7 @@ class Booking {
     *     pattern="/^[A-Za-z]+$/",
     *     message="Only letters allowed"
     * )
-    * @ORM\Column(type="string", length=20)
+    * @ORM\Column(type="string", length=30)
     */
     private $category;
 
@@ -110,7 +112,7 @@ class Booking {
     *     pattern="/^[0-9]+$/",
     *     message="Only numbers allowed"
     * )
-    * @ORM\Column(type="decimal", precision=8, scale=2)    
+    * @ORM\Column(type="decimal", precision=15, scale=2)    
     */
     private $price;
 
@@ -121,12 +123,12 @@ class Booking {
     private $image;
 
     /**
-    * @ORM\Column(type="integer", length=5)    
+    * @ORM\Column(type="smallint")    
     */
     private $reputation;
     
     /**
-    * @ORM\Column(type="integer")    
+    * @ORM\Column(type="smallint")    
     */
     private $availability;
     
@@ -141,6 +143,21 @@ class Booking {
     * )
     */
     private $zipcode;
+    
+    
+    private $city;
+    
+    
+    private $country;
+    
+    
+    private $address;
+    
+    
+    /**   
+    * @ORM\Column(type="string", length=7, nullable=true)
+    */
+    private $reputationBadge;
 
     public function getId(): ?int
     {
@@ -236,18 +253,51 @@ class Booking {
         return $this->zipcode;
     }
     
-   public function setZipcode(int $zipcode): self
+    public function setZipcode(int $zipcode): self
     {
         $this->zipcode = $zipcode;
 
         return $this;
     }
     
-    public function __toString()
+    public function getCity()
     {
-        return;
+        return $this->city;
     }
+    
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
 
+        return $this;
+    }
+    
+    
+    public function getAddress()
+    {
+        return $this->address;
+    }
+    
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+    
+    
+    public function getCountry()
+    {
+        return $this->country;
+    }
+    
+    public function setCountry(string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+    
     public function getAvailability(): ?int
     {
         return $this->availability;
@@ -256,6 +306,30 @@ class Booking {
     public function setAvailability(int $availability): self
     {
         $this->availability = $availability;
+
+        return $this;
+    }    
+    
+    public function getReputationBadge(): ?string
+    {
+        return $this->reputationBadge;
+    }
+
+    public function setReputationBadge(string $reputation): self
+    {
+        if ($reputation <= 799 && $reputation > 500)
+        {
+            $this->reputationBadge = "Yellow";
+        }
+        else if($reputation <= 500)
+        {
+            $this->reputationBadge = "Red";
+        }
+        else if($reputation > 799)
+        {
+            $this->reputationBadge = "Green";
+        }
+        
 
         return $this;
     }

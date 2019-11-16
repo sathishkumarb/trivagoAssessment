@@ -6,6 +6,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Booking;
@@ -17,7 +18,10 @@ class BookingType extends AbstractType
     ->add('hotelname')
     ->add('price', MoneyType::class)
     ->add('rating', IntegerType::class)
-    ->add('zipcode', IntegerType::class)
+        ->add('zipcode', IntegerType::class)
+        ->add('city', TextType::class, ['required'=>false])
+        ->add('address', TextType::class, ['required'=>false])
+        ->add('country', TextType::class, ['required'=>false])
     ->add('category')
     ->add('image', UrlType::class, [
                 'default_protocol' => 'https',
