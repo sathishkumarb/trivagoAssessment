@@ -2,7 +2,7 @@
 namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -14,7 +14,7 @@ use App\Form\BookingType;
  * Booking controller.
  * @Route("/", name="api_")
  */
-class BookingController extends FOSRestController
+class BookingController extends AbstractFOSRestController
 {
   /**
    * get by booking rating
