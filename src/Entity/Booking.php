@@ -108,10 +108,7 @@ class Booking {
 
     /**
     * @Assert\NotBlank()
-    * @Assert\Regex(
-    *     pattern="/^[0-9]+$/",
-    *     message="Only numbers allowed"
-    * )
+    * @Assert\Regex("/^\d+(\.\d+)?/")
     * @ORM\Column(type="decimal", precision=15, scale=2)    
     */
     private $price;
