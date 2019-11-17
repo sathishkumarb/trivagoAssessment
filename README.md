@@ -24,3 +24,26 @@ or
 #php bin/phpunit src/Tests/BookingControllerTest
 
 #php bin/phpunit src/Tests/BookingRepoTest
+
+
+
+##Sample json
+{
+  "hotelname" : "Free",
+  "category"  : "Hotel",
+  "price"     : 14.50,
+  "rating"    :1,
+  "availability": 56,
+  "zipcode": 50000,
+  "image" : "https://www.example.com",
+}
+
+
+##API
+  GET          /api/bookingByRating/{rating}
+  GET          /api/bookingByCategory/{category}
+  GET          /api/bookingByCity/{city}
+  GET          /api/bookingByReputationBadge/{reputationbadge}
+  GET          /api/bookingByAvailabilityLess/{availability}
+  GET          /api/bookingByAvailabilityGreater/{availability}
+  POST         /api/booking
