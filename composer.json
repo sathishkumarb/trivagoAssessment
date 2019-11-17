@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/annotations": "^1.8",
+        "friendsofphp/php-cs-fixer": "^2.16",
         "friendsofsymfony/rest-bundle": "^2.6",
         "guzzlehttp/guzzle": "^6.4",
         "jms/serializer-bundle": "^3.4",

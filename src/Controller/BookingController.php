@@ -141,7 +141,7 @@ class BookingController extends AbstractFOSRestController
    *
    * @return Response
    */
-  public function postBookingAction(Request $request): View
+  public function postBookingAction(Request $request)
   {
     $booking = new Booking();
     $form = $this->createForm(BookingType::class, $booking);
