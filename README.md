@@ -41,10 +41,10 @@ or
 
 
 ##API
-  GET          /api/bookingByRating/{rating}
-  GET          /api/bookingByCategory/{category}
-  GET          /api/bookingByCity/{city}
-  GET          /api/bookingByReputationBadge/{reputationbadge}
-  GET          /api/bookingByAvailabilityLess/{availability}
-  GET          /api/bookingByAvailabilityGreater/{availability}
-  POST         /api/booking
+#GET          /api/bookingByRating/{rating}
+#GET          /api/bookingByCategory/{category}
+#GET          /api/bookingByCity/{city}
+#GET          /api/bookingByReputationBadge/{reputationbadge}
+#GET          /api/bookingByAvailabilityLess/{availability}
+#GET          /api/bookingByAvailabilityGreater/{availability}
+#POST         /api/booking
